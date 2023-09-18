@@ -1,9 +1,26 @@
 from django.contrib import admin
 
-from .models import Category
-from .models import Location
-from .models import Post
+from .models import Category, Location, Post
 
-admin.site.register(Category)
-admin.site.register(Location)
-admin.site.register(Post)
+
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'is_published', 'created_at')
+    list_filter = ('is_published',)
+    search_fields = ('name',)
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_published', 'created_at')
+    list_filter = ('is_published',)
+    search_fields = ('title', 'description')
+
+
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'category', 'pub_date', 'is_published')
+    list_filter = ('category', 'is_published')
+    search_fields = ('title', 'text')
+
+
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Location, LocationAdmin)
+admin.site.register(Post, PostAdmin)

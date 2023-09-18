@@ -1,40 +1,46 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import Http404
+from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
-from blog.models import Post, Category
+from blog.models import Category, Post
+
+POST_SHOW_LIMIT = 5
+
+
+def get_posts():
+    """Функция, возвращающая базовый набор объектов по указанным фильтрам"""
+    return Post.objects.filter(
+        pub_date__lte=timezone.now(),
+        is_published=True,
+    ).select_related('category', 'author', 'location')
 
 
 def index(request):
-    template = 'blog/index.html'
+    """Функция для отображения главной страницы."""
     post_list = Post.objects.filter(
         pub_date__lte=timezone.now(),
         is_published=True,
-        category__is_published=True).order_by('-pub_date')[:5]
+        category__is_published=True
+        ).order_by('-pub_date')[:POST_SHOW_LIMIT]
     context = {'post_list': post_list}
-    return render(request, template, context)
+    return render(request, 'blog/index.html', context)
 
 
 def post_detail(request, post_id):
-    template = 'blog/detail.html'
+    """Функция для отображения отдельного поста."""
 
-    post = get_object_or_404(Post, pk=post_id)
-
-    if (
-        post.pub_date > timezone.now()
-        or not post.is_published
-        or not post.category.is_published
-    ):
-        raise Http404('Публикация не найдена')
+    post = get_object_or_404(
+            get_posts(),
+            pk=post_id,
+            category__is_published=True
+        )
 
     context = {'post': post}
 
-    return render(request, template, context)
+    return render(request, 'blog/detail.html', context)
 
 
 def category_posts(request, category_slug):
-    template = 'blog/category.html'
-
+    """Функция для отображения постов отдельной категории."""
     category = get_object_or_404(
         Category.objects.filter(is_published=True),
         slug=category_slug,
@@ -47,4 +53,4 @@ def category_posts(request, category_slug):
     ).order_by('-pub_date')
 
     context = {'category': category, 'posts': posts}
-    return render(request, template, context)
+    return render(request, 'blog/category.html', context)
