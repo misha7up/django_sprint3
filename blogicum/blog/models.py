@@ -12,11 +12,13 @@ class Category(models.Model):
                                    verbose_name='Описание')
     slug = models.SlugField(unique=True, blank=False,
                             verbose_name='Идентификатор',
-                            help_text='	Идентификатор страницы '
+                            help_text='Идентификатор страницы '
                             'для URL; разрешены символы латиницы, '
                             'цифры, дефис и подчёркивание.')
     is_published = models.BooleanField(default=True, blank=False,
-                                       verbose_name='Опубликовано')
+                                       verbose_name='Опубликовано',
+                                       help_text='Снимите галочку, '
+                                       'чтобы скрыть публикацию.')
     created_at = models.DateTimeField(auto_now_add=True, blank=False,
                                       verbose_name='Добавлено')
 
