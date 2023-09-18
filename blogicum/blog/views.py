@@ -38,7 +38,7 @@ def category_posts(request, category_slug):
     category = get_object_or_404(
         Category.objects.filter(is_published=True),
         slug=category_slug,
-        )
+    )
 
     posts = Post.objects.filter(
         category__slug=category_slug,
