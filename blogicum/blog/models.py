@@ -10,7 +10,7 @@ class CommonFields(models.Model):
                                        help_text=(
                                            'Снимите галочку, '
                                            'чтобы скрыть публикацию.'
-                                           )
+                                       )
                                        )
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name='Добавлено')
@@ -29,7 +29,7 @@ class Category(CommonFields):
                                 'Идентификатор страницы для URL; '
                                 'разрешены символы латиницы, '
                                 'цифры, дефис и подчёркивание.'
-                                )
+                            )
                             )
 
     class Meta:
@@ -61,7 +61,7 @@ class Post(CommonFields):
                                         'Если установить дату и время '
                                         'в будущем — можно делать отложенные '
                                         'публикации.'
-                                        )
+                                    )
                                     )
     author = models.ForeignKey(User,
                                on_delete=models.CASCADE,

@@ -20,7 +20,7 @@ def index(request):
         pub_date__lte=timezone.now(),
         is_published=True,
         category__is_published=True
-        ).order_by('-pub_date')[:POST_SHOW_LIMIT]
+    ).order_by('-pub_date')[:POST_SHOW_LIMIT]
     context = {'post_list': post_list}
     return render(request, 'blog/index.html', context)
 
@@ -28,11 +28,9 @@ def index(request):
 def post_detail(request, post_id):
     """Функция для отображения отдельного поста."""
 
-    post = get_object_or_404(
-            get_posts(),
-            pk=post_id,
-            category__is_published=True
-        )
+    post = get_object_or_404(get_posts(),
+                             pk=post_id,
+                             category__is_published=True)
 
     context = {'post': post}
 
